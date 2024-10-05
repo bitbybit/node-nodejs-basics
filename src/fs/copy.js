@@ -3,7 +3,30 @@ import path from 'node:path'
 
 const dirPath = `${import.meta.dirname}/files`
 const dirCopyPath = `${import.meta.dirname}/files_copy`
+const dirPathAbsolute = path.resolve(dirPath)
+const dirCopyPathPathAbsolute = path.resolve(dirCopyPath)
 const messageFailed = 'FS operation failed'
+
+/**
+ * @description Try to access `dirCopyPath`
+ * @returns {Promise<boolean>}
+ * @throws {Error}
+ */
+const canAccessDirCopy = async () => {
+  let canAccess = true
+
+  try {
+    await fs.access(dirCopyPathPathAbsolute)
+  } catch (e) {
+    if (e?.code === 'ENOENT') {
+      canAccess = false
+    } else {
+      throw e
+    }
+  }
+
+  return canAccess
+}
 
 /**
  * @description Copies folder `files` files with all its content into folder `files_copy` at the same level (if `files` folder doesn't exists or `files_copy` has already been created `Error` with message `FS operation failed` must be thrown)
@@ -11,20 +34,22 @@ const messageFailed = 'FS operation failed'
  * @throws {Error}
  */
 const copy = async () => {
-    try {
-      const pathToDirAbsolute = path.resolve(dirPath)
-      const pathToDirCopyAbsolute = path.resolve(dirCopyPath)
+    const dirCopyExists = await canAccessDirCopy()
 
-      await fs.cp(pathToDirAbsolute, pathToDirCopyAbsolute, {
+    if (dirCopyExists) {
+      throw new Error(messageFailed)
+    }
+
+    try {
+      await fs.cp(dirPathAbsolute, dirCopyPathPathAbsolute, {
         errorOnExist: true,
         force: false,
         recursive: true
       })
     } catch (e) {
       const isMissingDir = e?.code === 'ENOENT'
-      const dirCopyExists = e?.code === 'ERR_FS_CP_EEXIST'
 
-      if (isMissingDir || dirCopyExists) {
+      if (isMissingDir) {
         throw new Error(messageFailed)
       } else {
         throw e
