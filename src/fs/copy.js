@@ -4,7 +4,7 @@ import path from 'node:path'
 const dirPath = `${import.meta.dirname}/files`
 const dirCopyPath = `${import.meta.dirname}/files_copy`
 const dirPathAbsolute = path.resolve(dirPath)
-const dirCopyPathPathAbsolute = path.resolve(dirCopyPath)
+const dirCopyPathAbsolute = path.resolve(dirCopyPath)
 const messageFailed = 'FS operation failed'
 
 /**
@@ -16,7 +16,7 @@ const canAccessDirCopy = async () => {
   let canAccess = true
 
   try {
-    await fs.access(dirCopyPathPathAbsolute)
+    await fs.access(dirCopyPathAbsolute)
   } catch (e) {
     if (e?.code === 'ENOENT') {
       canAccess = false
@@ -41,7 +41,7 @@ const copy = async () => {
     }
 
     try {
-      await fs.cp(dirPathAbsolute, dirCopyPathPathAbsolute, {
+      await fs.cp(dirPathAbsolute, dirCopyPathAbsolute, {
         errorOnExist: true,
         force: false,
         recursive: true
