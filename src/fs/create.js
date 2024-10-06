@@ -12,17 +12,17 @@ const messageFileExists = 'FS operation failed'
  * @throws {Error}
  */
 const create = async () => {
-    try {
-      await fs.writeFile(filePathAbsolute, fileContent, { flag: 'wx' })
-    } catch (e) {
-      const fileExists = e?.code === 'EEXIST'
+  try {
+    await fs.writeFile(filePathAbsolute, fileContent, { flag: 'wx' })
+  } catch (e) {
+    const fileExists = e?.code === 'EEXIST'
 
-      if (fileExists) {
-        throw new Error(messageFileExists)
-      } else {
-        throw e
-      }
+    if (fileExists) {
+      throw new Error(messageFileExists)
+    } else {
+      throw e
     }
+  }
 }
 
 await create()

@@ -34,27 +34,27 @@ const canAccessDirCopy = async () => {
  * @throws {Error}
  */
 const copy = async () => {
-    const dirCopyExists = await canAccessDirCopy()
+  const dirCopyExists = await canAccessDirCopy()
 
-    if (dirCopyExists) {
+  if (dirCopyExists) {
+    throw new Error(messageFailed)
+  }
+
+  try {
+    await fs.cp(dirPathAbsolute, dirCopyPathAbsolute, {
+      errorOnExist: true,
+      force: false,
+      recursive: true
+    })
+  } catch (e) {
+    const isMissingDir = e?.code === 'ENOENT'
+
+    if (isMissingDir) {
       throw new Error(messageFailed)
+    } else {
+      throw e
     }
-
-    try {
-      await fs.cp(dirPathAbsolute, dirCopyPathAbsolute, {
-        errorOnExist: true,
-        force: false,
-        recursive: true
-      })
-    } catch (e) {
-      const isMissingDir = e?.code === 'ENOENT'
-
-      if (isMissingDir) {
-        throw new Error(messageFailed)
-      } else {
-        throw e
-      }
-    }
+  }
 }
 
 await copy()
