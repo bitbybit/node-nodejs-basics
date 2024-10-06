@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import os from 'node:os'
 
 const filePath = `${import.meta.dirname}/files/fileToWrite.txt`
 const filePathAbsolute = path.resolve(filePath)
