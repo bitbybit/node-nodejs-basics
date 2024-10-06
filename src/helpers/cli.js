@@ -1,9 +1,10 @@
 /**
  * @description Format `Object.entries()` to preferred output
- * @param {[string, string][]} entries
- * @param {([string, string]) => string} mapper
- * @param {string} separatorOfItems
- * @param {string} separatorOfValues
+ * @param {Object} payload
+ * @param {[string, string][]} payload.entries
+ * @param {([string, string]) => string} payload.mapper
+ * @param {string} payload.separatorOfItems
+ * @param {string} payload.separatorOfValues
  * @returns {string}
  */
 export const formatEntries = ({
