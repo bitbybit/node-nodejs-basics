@@ -13,13 +13,7 @@ const write = async () => {
 
   const stream = file.createWriteStream()
 
-  return new Promise((resolve, reject) => {
-    process.stdin.on('error', error => {
-      stream.end()
-
-      reject(error)
-    })
-
+  return new Promise((resolve) => {
     process.stdin.on('data', data => {
       stream.write(data)
     })
