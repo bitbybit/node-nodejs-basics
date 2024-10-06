@@ -1,3 +1,5 @@
+import { formatEntries } from '../helpers/cli.js'
+
 const prefix = 'RSS_'
 const separatorOfValues = '='
 const separatorOfItems = '; '
@@ -10,11 +12,11 @@ const parseEnv = () => {
 
   const envsFiltered = envs.filter(([key]) => key.startsWith(prefix))
 
-  const envsMapped = envsFiltered.map(
-    ([key, value]) => `${key}${separatorOfValues}${value}`
-  )
-
-  const envsFormatted = envsMapped.join(separatorOfItems)
+  const envsFormatted = formatEntries({
+    entries: envsFiltered,
+    separatorOfItems,
+    separatorOfValues
+  })
 
   console.log(envsFormatted)
 }
